@@ -5,6 +5,7 @@ from backend.models.trend import Trend
 from backend.models.prediction import Prediction
 from backend.models.opportunity import Opportunity
 import pandas as pd
+import sys
 
 CLEANED_DATA_PATH = "data/processed/cleaned_data.csv"
 
@@ -16,7 +17,7 @@ def run_spark_job():
     (évite les conflits de mémoire/session Spark avec le serveur async).
     """
     result = subprocess.run(
-        ["python", "-m", "data_processing.spark_job"],
+        [sys.executable, "-m", "data_processing.spark_job"],
         capture_output=True,
         text=True,
     )

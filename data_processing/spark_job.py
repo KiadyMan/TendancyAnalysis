@@ -2,6 +2,7 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, year, month, dayofmonth, round, lag, when, coalesce, lit
 from pyspark.sql.window import Window
+import pandas as pd
 
 def run_p1_pipeline(input_path: str, output_path: str):
     spark = SparkSession.builder \
@@ -47,7 +48,11 @@ def run_p1_pipeline(input_path: str, output_path: str):
 
     # 5. Exportation CSV
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    df_final.toPandas().to_csv(output_path, index=False)
+
+    rows = df_final.collect()
+    df_pandas = pd.DataFrame([row.asDict() for row in rows])
+    df_pandas.to_csv(output_path, index=False)
+
     print(f"Pipeline P1 exécuté avec succès : {output_path}")
 
 if __name__ == "__main__":
